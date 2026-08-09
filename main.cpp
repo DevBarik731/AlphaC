@@ -1,7 +1,7 @@
-#include "board.hpp"
-#include "knight.hpp"
-#include "king.hpp"
-#include "rook.hpp"
+#include "valid/board.hpp"
+#include "valid/knight.hpp"
+#include "valid/king.hpp"
+#include "valid/rook.hpp"
 using namespace std;
 int main(){
     Board a=Board();

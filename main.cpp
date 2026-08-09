@@ -5,7 +5,6 @@
 #include "king.h"
 #include "rook.h"
 using namespace std;
-
 int main(){
     Board a=Board();
     a.display();

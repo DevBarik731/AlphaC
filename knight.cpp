@@ -1,5 +1,5 @@
-#include "board.h"
-#include "knight.h"
+#include "board.hpp"
+#include "knight.hpp"
 using namespace std;
 
 // Validation Function for Knight
@@ -8,7 +8,7 @@ using namespace std;
 // 2 : possible with kill
 // move from (a,b) -> (x,y)
 int Knight_validate(Board &v,int a,int b,int x,int y){
-
+    
     // here dx and dy enlist all possible movements of knight
     if(v.board[a][b]*v.board[x][y]<0) return 0; // checking if same colour
     vector<int> dx={1,1,-1,-1,2,2,-2,-2};

@@ -1,5 +1,5 @@
-#include "board.h"
-#include "king.h"
+#include "board.hpp"
+#include "king.hpp"
 using namespace std;
 
 // Validation Function for King

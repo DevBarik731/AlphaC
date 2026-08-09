@@ -1,6 +1,7 @@
-#include <vector>
-
+#include "board.hpp"
+#include "pawn.hpp"
 using namespace std;
+
 
 int validatePawnMove(Board &b,int initial_row,int initial_column,int final_row,int final_column)
 {

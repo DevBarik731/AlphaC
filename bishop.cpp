@@ -1,4 +1,6 @@
-#include <vector>
+#include "bishop.hpp"
+#include "board.hpp"
+
 using namespace std;
 
 int validateBishopMove(Board &b,int initial_row,int initial_column,int final_row,int final_column)

@@ -1,9 +1,7 @@
-#include<iostream>
-#include<vector>
-#include "board.h"
-#include "knight.h"
-#include "king.h"
-#include "rook.h"
+#include "board.hpp"
+#include "knight.hpp"
+#include "king.hpp"
+#include "rook.hpp"
 using namespace std;
 int main(){
     Board a=Board();

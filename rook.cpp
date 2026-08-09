@@ -1,5 +1,6 @@
-#include "board.h"
-#include "rook.h"
+#include<iostream>
+#include "board.hpp"
+#include "rook.hpp"
 using namespace std;
 
 // Validation Function for rook
@@ -25,3 +26,4 @@ int Rook_validate(Board &v,int a,int b,int x,int y){
     else return 1;
 
 }
+

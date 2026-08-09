@@ -1,6 +1,5 @@
-#include<iostream>
-#include "board.h"
-#include<vector>
+#include "board.hpp"
+
 using namespace std;
 
 

@@ -293,4 +293,6 @@ CMakeFiles/app.dir/main.cpp.o: \
  /usr/include/SFML/System/MemoryInputStream.hpp \
  /usr/include/SFML/System/Sleep.hpp \
  /usr/include/SFML/System/TimeoutWithPredicate.hpp \
- /usr/include/SFML/System/Version.hpp
+ /usr/include/SFML/System/Version.hpp /usr/include/c++/16/map \
+ /usr/include/c++/16/bits/stl_tree.h /usr/include/c++/16/bits/stl_map.h \
+ /usr/include/c++/16/bits/stl_multimap.h

@@ -1,56 +1,341 @@
 #include "validate.hpp"
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include <optional>
+#include <map>
+
 using namespace std;
-int main(){
-    Board a=Board();
-    a.display();
-    cout<<"\n";
+enum Piece {
+    EMPTY = 0,
+    BLACK_PAWN=-1,
+    BLACK_ROOK=-2,
+    BLACK_KNIGHT=-3,
+    BLACK_BISHOP=-4,
+    BLACK_QUEEN=-5,
+    BLACK_KING=-6,
+    WHITE_PAWN = 1,
+    WHITE_ROOK=2,
+    WHITE_KNIGHT=3,
+    WHITE_BISHOP=4,
+    WHITE_QUEEN=5,
+    WHITE_KING=6
+};
+string getTextureName(int piece)
+{
+    switch (piece)
+    {
+        case BLACK_PAWN:   return "texture/B_pawn.png";
+        case BLACK_ROOK:   return "texture/B_rook.png";
+        case BLACK_KNIGHT: return "texture/B_knight.png";
+        case BLACK_BISHOP: return "texture/B_bishop.png";
+        case BLACK_QUEEN:  return "texture/B_queen.png";
+        case BLACK_KING:   return "texture/B_king.png";
+        case WHITE_PAWN:   return "texture/W_pawn.png";
+        case WHITE_ROOK:   return "texture/W_rook.png";
+        case WHITE_KNIGHT: return "texture/W_knight.png";
+        case WHITE_BISHOP: return "texture/W_bishop.png";
+        case WHITE_QUEEN:  return "texture/W_queen.png";
+        case WHITE_KING:   return "texture/W_king.png";
+    }
+    return "";
+}
+bool isWhite(int piece)
+{
+    return piece == WHITE_PAWN ||
+           piece == WHITE_ROOK ||
+           piece == WHITE_KNIGHT ||
+           piece == WHITE_BISHOP ||
+           piece == WHITE_QUEEN ||
+           piece == WHITE_KING;
+}
+bool isBlack(int piece)
+{
+    return piece == BLACK_PAWN ||
+           piece == BLACK_ROOK ||
+           piece == BLACK_KNIGHT ||
+           piece == BLACK_BISHOP ||
+           piece == BLACK_QUEEN ||
+           piece == BLACK_KING;
+}
+int main()
+{
+    Board a;
     sf::RenderWindow window(
         sf::VideoMode({480, 480}),
         "Chess Board"
     );
-    sf::Texture black_pawn;
-    (void)black_pawn.loadFromFile("texture/B_pawn.png");
+    map<int, sf::Texture> textures;
+    vector<int> pieces = {
+        BLACK_PAWN,
+        BLACK_ROOK,
+        BLACK_KNIGHT,
+        BLACK_BISHOP,
+        BLACK_QUEEN,
+        BLACK_KING,
+        WHITE_PAWN,
+        WHITE_ROOK,
+        WHITE_KNIGHT,
+        WHITE_BISHOP,
+        WHITE_QUEEN,
+        WHITE_KING
+    };
 
+    for (int piece : pieces)
+    {
+        sf::Texture texture;
+
+        string filename = getTextureName(piece);
+
+        if (!texture.loadFromFile(filename))
+        {
+            cerr << "Failed to load: " << filename << endl;
+            return 1;
+        }
+        textures[piece] = texture;
+    }
+    bool selected = false;
+
+    int selectedRow = -1;
+    int selectedCol = -1;
+    bool whiteTurn = true;
     while (window.isOpen())
     {
-        while (const std::optional event = window.pollEvent())
+        while (const optional event = window.pollEvent())
         {
             if (event->is<sf::Event::Closed>())
+            {
                 window.close();
+            }
+            if (const auto* mouse =
+                    event->getIf<sf::Event::MouseButtonPressed>())
+            {
+                if (mouse->button != sf::Mouse::Button::Left)
+                    continue;
+
+                int mouseX = mouse->position.x;
+                int mouseY = mouse->position.y;
+                if (mouseX < 0 || mouseX >= 480 ||
+                    mouseY < 0 || mouseY >= 480)
+                    continue;
+
+                int row = mouseY / 60;
+                int col = mouseX / 60;
+
+                if (!selected)
+                {
+                    int piece = a.board[row][col];
+
+                    if (piece == EMPTY)
+                        continue;
+
+                    if (whiteTurn && !isWhite(piece))
+                        continue;
+
+                    if (!whiteTurn && !isBlack(piece))
+                        continue;
+
+                    selected = true;
+
+                    selectedRow = row;
+                    selectedCol = col;
+
+                    cout << "Selected: "
+                         << row << " "
+                         << col << endl;
+                }
+
+                else
+                {
+                    if (row == selectedRow &&
+                        col == selectedCol)
+                    {
+                        selected = false;
+                        selectedRow = -1;
+                        selectedCol = -1;
+
+                        continue;
+                    }
+
+                    int destinationPiece = a.board[row][col];
+
+                    if (destinationPiece != EMPTY)
+                    {
+                        if (whiteTurn && isWhite(destinationPiece))
+                        {
+                            continue;
+                        }
+
+                        if (!whiteTurn && isBlack(destinationPiece))
+                        {
+                            continue;
+                        }
+                    }
+
+                    bool valid = validate(
+                        a,
+                        selectedRow,
+                        selectedCol,
+                        row,
+                        col
+                    );
+
+                    if (valid)
+                    {
+                        cout << "Valid move: "
+                             << selectedRow << ","
+                             << selectedCol
+                             << " -> "
+                             << row << ","
+                             << col << endl;
+
+                        a.board[row][col] =
+                            a.board[selectedRow][selectedCol];
+
+                        a.board[selectedRow][selectedCol] = EMPTY;
+
+                        whiteTurn = !whiteTurn;
+                    }
+                    else
+                    {
+                        cout << "Invalid move\n";
+                    }
+                    selected = false;
+
+                    selectedRow = -1;
+                    selectedCol = -1;
+                }
+            }
         }
+
 
         window.clear();
 
-        for(int r=0;r<8;r++)
+        for (int r = 0; r < 8; r++)
         {
-            for(int c=0;c<8;c++)
+            for (int c = 0; c < 8; c++)
             {
-                sf::RectangleShape square({60.f,60.f});
-                square.setPosition({60.f*c,60.f*r});
+                sf::RectangleShape square(
+                    sf::Vector2f(60.f, 60.f)
+                );
 
-                if((r+c)%2==0)
+                square.setPosition(
+                    sf::Vector2f(
+                        c * 60.f,
+                        r * 60.f
+                    )
+                );
+
+                if ((r + c) % 2 == 0)
+                {
                     square.setFillColor(
-                        sf::Color(240,217,181)
+                        sf::Color(240, 217, 181)
                     );
+                }
                 else
+                {
                     square.setFillColor(
-                        sf::Color(181,136,99)
+                        sf::Color(181, 136, 99)
                     );
+                }
+
+                if (selected &&
+                    r == selectedRow &&
+                    c == selectedCol)
+                {
+                    square.setFillColor(
+                        sf::Color(246, 246, 105)
+                    );
+                }
 
                 window.draw(square);
             }
         }
-        for(int c = 0; c < 8; c++){
-                sf::Sprite pawn(black_pawn);
-                pawn.setPosition({c * 60.f, 60.f});
-                window.draw(pawn);
+
+
+        if (selected)
+        {
+            for (int r = 0; r < 8; r++)
+            {
+                for (int c = 0; c < 8; c++)
+                {
+                    if (r == selectedRow &&
+                        c == selectedCol)
+                        continue;
+
+                    int piece = a.board[r][c];
+                    if (piece != EMPTY)
+                    {
+                        if (whiteTurn && isWhite(piece))
+                            continue;
+
+                        if (!whiteTurn && isBlack(piece))
+                            continue;
+                    }
+
+                    if (validate(
+                        a,
+                        selectedRow,
+                        selectedCol,
+                        r,
+                        c))
+                    {
+                        sf::CircleShape circle(10.f);
+
+                        circle.setPosition(
+                            sf::Vector2f(
+                                c * 60.f + 20.f,
+                                r * 60.f + 20.f
+                            )
+                        );
+
+                        circle.setFillColor(
+                            sf::Color(80, 80, 80, 180)
+                        );
+
+                        window.draw(circle);
+                    }
+                }
             }
+        }
+
+
+        for (int r = 0; r < 8; r++)
+        {
+            for (int c = 0; c < 8; c++)
+            {
+                int piece = a.board[r][c];
+
+                if (piece == EMPTY)
+                    continue;
+
+                sf::Sprite sprite(textures[piece]);
+
+                sf::Vector2u size =
+                    textures[piece].getSize();
+
+                float scaleX =
+                    60.f / size.x;
+
+                float scaleY =
+                    60.f / size.y;
+
+                sprite.setScale(
+                    sf::Vector2f(scaleX, scaleY)
+                );
+
+                sprite.setPosition(
+                    sf::Vector2f(
+                        c * 60.f,
+                        r * 60.f
+                    )
+                );
+
+                window.draw(sprite);
+            }
+        }
 
         window.display();
     }
-    // cout<<validate(a,7,4,6,4)<<endl;
-    // cout<<validate(a,7,1,5,0)<<endl;
-    // cout<<validate(a,7,0,7,5)<<endl;
-    // cout<<validate(a,4,0,4,7)<<endl;
+
+    return 0;
 }

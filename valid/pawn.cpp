@@ -3,7 +3,7 @@
 using namespace std;
 
 
-int validatePawnMove(Board &b,int initial_row,int initial_column,int final_row,int final_column)
+int Pawn_validate(Board &b,int initial_row,int initial_column,int final_row,int final_column)
 {
     vector<vector<int>> board=b.board;
     int piece=board[initial_row][initial_column];
@@ -68,4 +68,17 @@ int validatePawnMove(Board &b,int initial_row,int initial_column,int final_row,i
         }
     }
     return 0;
+}
+
+// checks if pawn in last row of enemy
+// auto promotes to queen
+
+void promote_pawn(Board &v,int x,int y){
+    if(x>=8 || x<0 || y<0 || y>=8) return;
+    if(v.board[x][y]<0 && x==7){
+        v.board[x][y]=-5;
+    }
+    if(v.board[x][y]>0 && x==0){
+        v.board[x][y]=5;
+    }
 }

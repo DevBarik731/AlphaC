@@ -25,3 +25,89 @@ int King_validate(Board &v,int a,int b,int x,int y){
 
     return 0;
 }
+
+int King_check(Board &v,int x,int y){
+
+    vector<int> hor={0,0,1,-1};
+    vector<int> ver={1,-1,0,0};
+    vector<int> dig_x={1,1,-1,-1};
+    vector<int> dig_y={1,-1,1,-1};
+    vector<int> knight_x={1,1,-1,-1,2,2,-2,-2};
+    vector<int> knight_y={-2,2,-2,2,1,-1,1,-1};
+
+    if(v.board[x][y]>0){
+        for(int it=0;it<4;it++){
+            int a=x+ver[it];
+            int b=y+hor[it];
+            while(a<8 && b<8 && a>=0 && b>=0){
+                if(v.board[a][b]!=0) break;
+                a+=ver[it];
+                b+=hor[it];
+            }
+            if(a<8 && b<8 && a>0 && b>0 && v.board[a][b]!=0){
+                if(v.board[a][b]==-6 && (abs(x-a)+abs(y-b))==1) return 1;
+                if(v.board[a][b]==-5 && v.board[a][b]==-2) return 1;
+            }
+        }
+        for(int it=0;it<4;it++){
+            int a=x+dig_x[it];
+            int b=y+dig_y[it];
+            while(a<8 && b<8 && a>=0 && b>=0){
+                if(v.board[a][b]!=0) break;
+                a+=dig_x[it];
+                b+=dig_y[it];
+            }
+            if(a<8 && b<8 && a>0 && b>0 && v.board[a][b]!=0){
+                if(v.board[a][b]==-6 && (abs(x-a)+abs(y-b))==2) return 1;
+                if(v.board[a][b]==-5 && v.board[a][b]==-4) return 1;
+                if(v.board[a][b]==-1 && (abs(x-a)+abs(y-b))==2 && x>a) return 1;
+            }
+        }
+
+        for(size_t i=0;i<8;i++){
+            int a=x+knight_x[i];
+            int b=y+knight_y[i];
+            if(a<8 && b<8 && a>0 && b>0 && v.board[a][b]==-3) return 1;
+        }
+
+
+        return 0;
+    }
+    else{
+        for(int it=0;it<4;it++){
+            int a=x+ver[it];
+            int b=y+hor[it];
+            while(a<8 && b<8 && a>=0 && b>=0){
+                if(v.board[a][b]!=0) break;
+                a+=ver[it];
+                b+=hor[it];
+            }
+            if(a<8 && b<8 && a>0 && b>0 && v.board[a][b]!=0){
+                if(v.board[a][b]==6 && (abs(x-a)+abs(y-b))==1) return 1;
+                if(v.board[a][b]==5 && v.board[a][b]==2) return 1;
+            }
+        }
+        for(int it=0;it<4;it++){
+            int a=x+dig_x[it];
+            int b=y+dig_y[it];
+            while(a<8 && b<8 && a>=0 && b>=0){
+                if(v.board[a][b]!=0) break;
+                a+=dig_x[it];
+                b+=dig_y[it];
+            }
+            if(a<8 && b<8 && a>0 && b>0 && v.board[a][b]!=0){
+                if(v.board[a][b]==6 && (abs(x-a)+abs(y-b))==2) return 1;
+                if(v.board[a][b]==5 && v.board[a][b]==-4) return 1;
+                if(v.board[a][b]==1 && (abs(x-a)+abs(y-b))==2 && x<a) return 1;
+            }
+        }
+        for(size_t i=0;i<8;i++){
+            int a=x+knight_x[i];
+            int b=y+knight_y[i];
+            if(a<8 && b<8 && a>0 && b>0 && v.board[a][b]==3) return 1;
+        }
+
+        return 0;
+    }
+
+}

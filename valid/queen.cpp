@@ -36,7 +36,7 @@ int Queen_validate(Board &b,int initial_row,int initial_column,int final_row,int
     }
     int r=initial_row+rowstep;
     int c=initial_column+colstep;
-    while(r!=final_row&&c!=final_column)
+    while(r!=final_row||c!=final_column)
     {
         if(board[r][c]!=0)
         {

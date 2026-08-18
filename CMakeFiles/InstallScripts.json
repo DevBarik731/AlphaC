@@ -1,7 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/home/percyjk/VScode/cpp_projects/Chess-Engine/cmake_install.cmake"
-	],
-	"Parallel" : false
-}

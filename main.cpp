@@ -162,11 +162,14 @@ int main()
                     {
                         if (whiteTurn && isWhite(destinationPiece))
                         {
+                            selectedRow=row;
+                            selectedCol=col;
                             continue;
                         }
-
                         if (!whiteTurn && isBlack(destinationPiece))
                         {
+                            selectedRow=row;
+                            selectedCol=col;
                             continue;
                         }
                     }
@@ -252,51 +255,68 @@ int main()
         }
 
 
-        if (selected)
+    if (selected)
+    {
+        for (int r = 0; r < 8; r++)
         {
-            for (int r = 0; r < 8; r++)
+            for (int c = 0; c < 8; c++)
             {
-                for (int c = 0; c < 8; c++)
+
+                if (r == selectedRow && c == selectedCol)
+                continue;
+
+                int destinationPiece = a.board[r][c];
+
+                if (destinationPiece != EMPTY)
                 {
-                    if (r == selectedRow &&
-                        c == selectedCol)
+                    if (whiteTurn && isWhite(destinationPiece))
                         continue;
 
-                    int piece = a.board[r][c];
-                    if (piece != EMPTY)
+                    if (!whiteTurn && isBlack(destinationPiece))
+                        continue;
+                }
+                if (validate(
+                    a,
+                    selectedRow,
+                    selectedCol,
+                    r,
+                    c))
+                {
+                    if (destinationPiece != EMPTY)
                     {
-                        if (whiteTurn && isWhite(piece))
-                            continue;
+                        sf::CircleShape circle(25.f);
 
-                        if (!whiteTurn && isBlack(piece))
-                            continue;
-                    }
-
-                    if (validate(
-                        a,
-                        selectedRow,
-                        selectedCol,
-                        r,
-                        c))
-                    {
-                        sf::CircleShape circle(10.f);
-
-                        circle.setPosition(
-                            sf::Vector2f(
-                                c * 60.f + 20.f,
-                                r * 60.f + 20.f
-                            )
-                        );
+                        circle.setPosition({
+                        c * 60.f + 5.f,
+                        r * 60.f + 5.f
+                        });
 
                         circle.setFillColor(
-                            sf::Color(80, 80, 80, 180)
+                        sf::Color(180, 50, 50, 150)
                         );
 
                         window.draw(circle);
-                    }
+                }
+
+                    else
+                    {
+                        sf::CircleShape circle(9.f);
+
+                        circle.setPosition({
+                        c * 60.f + 21.f,
+                        r * 60.f + 21.f
+                        });
+
+                        circle.setFillColor(
+                        sf::Color(50, 50, 50, 170)
+                        );
+
+                        window.draw(circle);
                 }
             }
         }
+    }
+}
 
 
         for (int r = 0; r < 8; r++)

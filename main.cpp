@@ -100,6 +100,10 @@ int main()
     bool whiteTurn = true;
     while (window.isOpen())
     {
+        if(whiteTurn&&game_end(a,a.whiteKingPos.first,a.whiteKingPos.second)||!(whiteTurn)&&game_end(a,a.blackKingPos.first,a.blackKingPos.second))
+        {
+            window.close();
+        }
         while (const optional event = window.pollEvent())
         {
             if (event->is<sf::Event::Closed>())

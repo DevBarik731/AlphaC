@@ -46,7 +46,7 @@ int King_check(Board &v,int x,int y){
                 a+=ver[it];
                 b+=hor[it];
             }
-            if(a<8 && b<8 && a>0 && b>0 && v.board[a][b]!=0){
+            if(a<8 && b<8 && a>=0 && b>=0 && v.board[a][b]!=0){
                 if(v.board[a][b]==-6 && (abs(x-a)+abs(y-b))==1) return 1;
                 if(v.board[a][b]==-5 || v.board[a][b]==-2) return 1;
             }
@@ -59,7 +59,7 @@ int King_check(Board &v,int x,int y){
                 a+=dig_x[it];
                 b+=dig_y[it];
             }
-            if(a<8 && b<8 && a>0 && b>0 && v.board[a][b]!=0){
+            if(a<8 && b<8 && a>=0 && b>=0 && v.board[a][b]!=0){
                 if(v.board[a][b]==-6 && (abs(x-a)+abs(y-b))==2) return 1;
                 if(v.board[a][b]==-5 || v.board[a][b]==-4) return 1;
                 if(v.board[a][b]==-1 && (abs(x-a)+abs(y-b))==2 && x>a) return 1;
@@ -69,7 +69,7 @@ int King_check(Board &v,int x,int y){
         for(size_t i=0;i<8;i++){
             int a=x+knight_x[i];
             int b=y+knight_y[i];
-            if(a<8 && b<8 && a>0 && b>0 && v.board[a][b]==-3) return 1;
+            if(a<8 && b<8 && a>=0 && b>=0 && v.board[a][b]==-3) return 1;
         }
 
 
@@ -84,7 +84,7 @@ int King_check(Board &v,int x,int y){
                 a+=ver[it];
                 b+=hor[it];
             }
-            if(a<8 && b<8 && a>0 && b>0 && v.board[a][b]!=0){
+            if(a<8 && b<8 && a>=0 && b>=0 && v.board[a][b]!=0){
                 if(v.board[a][b]==6 && (abs(x-a)+abs(y-b))==1) return 1;
                 if(v.board[a][b]==5 || v.board[a][b]==2) return 1;
             }
@@ -97,7 +97,7 @@ int King_check(Board &v,int x,int y){
                 a+=dig_x[it];
                 b+=dig_y[it];
             }
-            if(a<8 && b<8 && a>0 && b>0 && v.board[a][b]!=0){
+            if(a<8 && b<8 && a>=0 && b>=0 && v.board[a][b]!=0){
                 if(v.board[a][b]==6 && (abs(x-a)+abs(y-b))==2) return 1;
                 if(v.board[a][b]==5 || v.board[a][b]==-4) return 1;
                 if(v.board[a][b]==1 && (abs(x-a)+abs(y-b))==2 && x<a) return 1;
@@ -106,7 +106,7 @@ int King_check(Board &v,int x,int y){
         for(size_t i=0;i<8;i++){
             int a=x+knight_x[i];
             int b=y+knight_y[i];
-            if(a<8 && b<8 && a>0 && b>0 && v.board[a][b]==3) return 1;
+            if(a<8 && b<8 && a>=0 && b>=0 && v.board[a][b]==3) return 1;
         }
 
         return 0;

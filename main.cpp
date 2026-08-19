@@ -173,15 +173,27 @@ int main()
                             continue;
                         }
                     }
-
-                    bool valid = validate(
+                    bool valid;
+                    if(whiteTurn)
+                    valid = validate(
                         a,
                         selectedRow,
                         selectedCol,
                         row,
-                        col
+                        col,
+                        a.whiteKingPos.first,
+                        a.whiteKingPos.second
                     );
-
+                    else
+                    valid = validate(
+                        a,
+                        selectedRow,
+                        selectedCol,
+                        row,
+                        col,
+                        a.blackKingPos.first,
+                        a.blackKingPos.second
+                    );
                     if (valid)
                     {
                         cout << "Valid move: "
@@ -191,11 +203,27 @@ int main()
                              << row << ","
                              << col << endl;
 
+                        int piece=a.board[selectedRow][selectedCol];
+                             
                         a.board[row][col] =
                             a.board[selectedRow][selectedCol];
 
                         a.board[selectedRow][selectedCol] = EMPTY;
 
+                        if(piece==WHITE_KING)
+                        {
+                            a.whiteKingPos={row,col};
+                        }
+
+                        if(piece==BLACK_KING)
+                        {
+                            a.blackKingPos={row,col};
+                        }
+
+                        if(piece==WHITE_PAWN||piece==BLACK_PAWN)
+                        {
+                            promote_pawn(a,row,col);
+                        }
                         whiteTurn = !whiteTurn;
                     }
                     else
@@ -275,12 +303,16 @@ int main()
                     if (!whiteTurn && isBlack(destinationPiece))
                         continue;
                 }
-                if (validate(
+                if (whiteTurn&&validate(
                     a,
                     selectedRow,
                     selectedCol,
                     r,
-                    c))
+                    c,a.whiteKingPos.first,a.whiteKingPos.second)||!whiteTurn&&validate(a,
+                    selectedRow,
+                    selectedCol,
+                    r,
+                    c,a.blackKingPos.first,a.blackKingPos.second))
                 {
                     if (destinationPiece != EMPTY)
                     {

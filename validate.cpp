@@ -8,7 +8,7 @@ bool check(int x){
 
 // here we are inputing current position of king as well to check the "check" on king
 int validate(Board &v,int x_curr, int y_curr, int x_new, int y_new,int x_king,int y_king){
-    if(!check(x_curr) || !check(y_curr) || !check(x_new) || !check(y_new)) return 0;
+    if(!check(x_curr) || !check(y_curr) || !check(x_new) || !check(y_new) || !check(x_king) || !check(y_king)) return 0;
     int flag=abs(v.board[x_curr][y_curr]);
 
     // after each validation of pieces , if move is vaid piece is moved and then the current check on

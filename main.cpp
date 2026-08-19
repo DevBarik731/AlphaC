@@ -5,6 +5,7 @@
 #include <map>
 
 using namespace std;
+sf::Font font;
 enum Piece {
     EMPTY = 0,
     BLACK_PAWN=-1,
@@ -79,7 +80,15 @@ int main()
         WHITE_QUEEN,
         WHITE_KING
     };
+    if(!font.openFromFile("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"))
+    {
+        cerr << "Failed to load font\n";
+        return 1;
+    }
 
+    sf::Text winText(font);
+    winText.setCharacterSize(50);
+    winText.setFillColor(sf::Color::White);
     for (int piece : pieces)
     {
         sf::Texture texture;
@@ -100,10 +109,34 @@ int main()
     bool whiteTurn = true;
     while (window.isOpen())
     {
-        if(whiteTurn&&game_end(a,a.whiteKingPos.first,a.whiteKingPos.second)||!(whiteTurn)&&game_end(a,a.blackKingPos.first,a.blackKingPos.second))
+        if(game_end(a,a.whiteKingPos.first,a.whiteKingPos.second)==2)
         {
-            window.close();
+            cout<<"stalemate"<<endl;
+            break;
         }
+        if(whiteTurn&&game_end(a,a.whiteKingPos.first,a.whiteKingPos.second))
+    {   
+        cout << "BLACK WINS!" << endl;
+        winText.setString("BLACK WINS!");
+        window.clear();
+        window.draw(winText);
+        window.display();
+        sf::sleep(sf::seconds(10));
+        window.close();
+        break;
+    }
+
+    if (!whiteTurn&&game_end(a,a.blackKingPos.first,a.blackKingPos.second))
+    {
+        cout << "WHITE WINS!" << endl;
+        winText.setString("WHITE WINS!");
+        window.clear();
+        window.draw(winText);
+        window.display();
+        sf::sleep(sf::seconds(10));
+        window.close();
+        break;
+    }   
         while (const optional event = window.pollEvent())
         {
             if (event->is<sf::Event::Closed>())

@@ -9,4 +9,4 @@
 
 using namespace std;
 
-int validate(Board &v,int x_curr, int y_curr, int x_new, int y_new);
+int validate(Board &v,int x_curr, int y_curr, int x_new, int y_new,int x_king,int y_king);

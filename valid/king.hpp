@@ -10,4 +10,6 @@ using namespace std;
 // 2 : possible with kill
 // move from (a,b) -> (x,y)
 int King_validate(Board &v,int a,int b,int x,int y);
+
+// function to check if king in its current position is checked or not
 int King_check(Board &v,int x,int y);

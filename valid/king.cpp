@@ -27,6 +27,7 @@ int King_validate(Board &v,int a,int b,int x,int y){
     return 0;
 }
 
+// function to check if king in its current position is checked or not
 int King_check(Board &v,int x,int y){
 
     vector<int> hor={0,0,1,-1};
@@ -47,7 +48,7 @@ int King_check(Board &v,int x,int y){
             }
             if(a<8 && b<8 && a>0 && b>0 && v.board[a][b]!=0){
                 if(v.board[a][b]==-6 && (abs(x-a)+abs(y-b))==1) return 1;
-                if(v.board[a][b]==-5 && v.board[a][b]==-2) return 1;
+                if(v.board[a][b]==-5 || v.board[a][b]==-2) return 1;
             }
         }
         for(int it=0;it<4;it++){
@@ -60,7 +61,7 @@ int King_check(Board &v,int x,int y){
             }
             if(a<8 && b<8 && a>0 && b>0 && v.board[a][b]!=0){
                 if(v.board[a][b]==-6 && (abs(x-a)+abs(y-b))==2) return 1;
-                if(v.board[a][b]==-5 && v.board[a][b]==-4) return 1;
+                if(v.board[a][b]==-5 || v.board[a][b]==-4) return 1;
                 if(v.board[a][b]==-1 && (abs(x-a)+abs(y-b))==2 && x>a) return 1;
             }
         }
@@ -85,7 +86,7 @@ int King_check(Board &v,int x,int y){
             }
             if(a<8 && b<8 && a>0 && b>0 && v.board[a][b]!=0){
                 if(v.board[a][b]==6 && (abs(x-a)+abs(y-b))==1) return 1;
-                if(v.board[a][b]==5 && v.board[a][b]==2) return 1;
+                if(v.board[a][b]==5 || v.board[a][b]==2) return 1;
             }
         }
         for(int it=0;it<4;it++){
@@ -98,7 +99,7 @@ int King_check(Board &v,int x,int y){
             }
             if(a<8 && b<8 && a>0 && b>0 && v.board[a][b]!=0){
                 if(v.board[a][b]==6 && (abs(x-a)+abs(y-b))==2) return 1;
-                if(v.board[a][b]==5 && v.board[a][b]==-4) return 1;
+                if(v.board[a][b]==5 || v.board[a][b]==-4) return 1;
                 if(v.board[a][b]==1 && (abs(x-a)+abs(y-b))==2 && x<a) return 1;
             }
         }

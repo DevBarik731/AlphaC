@@ -99,7 +99,7 @@ int King_check(Board &v,int x,int y){
             }
             if(a<8 && b<8 && a>=0 && b>=0 && v.board[a][b]!=0){
                 if(v.board[a][b]==6 && (abs(x-a)+abs(y-b))==2) return 1;
-                if(v.board[a][b]==5 || v.board[a][b]==-4) return 1;
+                if(v.board[a][b]==5 || v.board[a][b]==4) return 1;
                 if(v.board[a][b]==1 && (abs(x-a)+abs(y-b))==2 && x<a) return 1;
             }
         }
@@ -112,4 +112,13 @@ int King_check(Board &v,int x,int y){
         return 0;
     }
 
+}
+
+bool castle_validate(Board &b,bool white,bool kingSide)
+{
+    int row=white?0:7;
+    if(white&&b.whiteKingMoved)
+    {
+        return false;
+    }
 }

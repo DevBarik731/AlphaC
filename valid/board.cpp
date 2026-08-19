@@ -15,6 +15,8 @@ Board::Board():board(8,vector<int>(8,0)){
         }
         board[0][4]=-6;
         board[7][4]=6;
+        whiteKingPos={7,4};
+        blackKingPos={0,4};
     }
 
 void Board::display(){

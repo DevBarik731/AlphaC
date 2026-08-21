@@ -5,7 +5,11 @@ using namespace std;
 
 int Bishop_validate(Board &b,int initial_row,int initial_column,int final_row,int final_column)
 {
+    
     vector<vector<int>> board=b.board;
+
+    // can't attack itself can it
+    if(board[initial_row][initial_column]*board[final_row][final_column]>0) return 0;
     int piece=board[initial_row][initial_column];
     if(abs(final_column-initial_column)!=abs(final_row-initial_row))
     {

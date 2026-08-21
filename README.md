@@ -4,7 +4,7 @@ A chess game and engine implementation written in C++ using SFML(for UI).
 
 ## Overview
 
-This project is a chess engine built from scratch with the goal of understanding how chess engines work internally. The focus is on implementing the game's rules, move validation, game-state management, and eventually developing a competitive AI opponent.
+This project is a chess engine built from scratch with the goal of understanding how chess engines work internally. The focus is on implementing the game's rules, move validation, game-state management,position evaluation function and eventually developing a competitive AI opponent.
 
 ## Current Features
 
@@ -20,9 +20,6 @@ This project is a chess engine built from scratch with the goal of understanding
 
 ## Work in Progress
 
-- Castling
-- Draw detection
-  - Threefold repetition
-  - Insufficient material
-- Move history improvements
+- Position Evaluation
+- Move Selection
  

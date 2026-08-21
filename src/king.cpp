@@ -114,11 +114,11 @@ int King_check(Board &v,int x,int y){
 
 }
 
-bool castle_validate(Board &b,bool white,bool kingSide)
-{
-    int row=white?0:7;
-    if(white&&b.whiteKingMoved)
-    {
-        return false;
-    }
-}
+// bool castle_validate(Board &b,bool white,bool kingSide)
+// {
+//     int row=white?0:7;
+//     if(white&&b.whiteKingMoved)
+//     {
+//         return false;
+//     }
+// }

@@ -13,7 +13,6 @@ int validate(Board &v,int x_curr, int y_curr, int x_new, int y_new,int x_king,in
 
     // after each validation of pieces , if move is vaid piece is moved and then the current check on
     // king is examined. and the piece movement is reversed.
-
     if(flag==1){
         int temp=Pawn_validate(v, x_curr,y_curr, x_new,y_new);
         if(!temp) return 0;
@@ -80,11 +79,37 @@ int validate(Board &v,int x_curr, int y_curr, int x_new, int y_new,int x_king,in
         int tp=v.board[x_new][y_new];
         v.board[x_new][y_new]=v.board[x_curr][y_curr];
         v.board[x_curr][y_curr]=0;
-
+        // castling
+        if(temp==3)
+        {
+            if(y_new>y_curr)
+            {
+                v.board[x_curr][5]=v.board[x_curr][7];
+                v.board[x_curr][7]=0;
+            }
+            else
+            {
+                v.board[x_curr][3]=v.board[x_curr][0];
+                v.board[x_curr][0]=0;
+            }
+        }
         // in case of king movement we use x_new and y_new positions to check if king is "checked".
         int checked=King_check(v,x_new,y_new);
         v.board[x_curr][y_curr]=v.board[x_new][y_new];
         v.board[x_new][y_new]=tp;
+        if(temp==3)
+        {
+            if(y_new>y_curr)
+            {
+                v.board[x_curr][7]=v.board[x_curr][5];
+                v.board[x_curr][5]=0;
+            }
+            else
+            {
+                v.board[x_curr][0]=v.board[x_curr][3];
+                v.board[x_curr][3]=0;
+            }
+        }
         if(checked) return 0;
         return temp;
     }

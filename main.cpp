@@ -210,7 +210,7 @@ int main()
                             continue;
                         }
                     }
-                    bool valid;
+                    int valid;
                     if(whiteTurn)
                     valid = validate(
                         a,
@@ -241,25 +241,50 @@ int main()
                              << col << endl;
 
                         int piece=a.board[selectedRow][selectedCol];
-                             
                         a.board[row][col] =
                             a.board[selectedRow][selectedCol];
 
                         a.board[selectedRow][selectedCol] = EMPTY;
-
+                        if(valid==3)
+                        {
+                            if(col>selectedCol)
+                            {
+                                a.board[selectedRow][5]=a.board[selectedRow][7];
+                                a.board[selectedRow][7]=EMPTY;
+                            }
+                            else
+                            {
+                                a.board[selectedRow][3]=a.board[selectedRow][0];
+                                a.board[selectedRow][0]=EMPTY;
+                            }
+                        }
                         if(piece==WHITE_KING)
                         {
                             a.whiteKingPos={row,col};
+                            a.whiteKingMoved=true;
                         }
-
                         if(piece==BLACK_KING)
                         {
                             a.blackKingPos={row,col};
+                            a.blackKingMoved=true;
                         }
-
                         if(piece==WHITE_PAWN||piece==BLACK_PAWN)
                         {
                             promote_pawn(a,row,col);
+                        }
+                        if(piece==WHITE_ROOK)
+                        {
+                            if(selectedRow==0 && selectedCol==0)
+                                a.whiteLeftRook=true;
+                            if(selectedRow==0 && selectedCol==7)
+                                a.whiteRightRook=true;
+                        }
+                        if(piece==BLACK_ROOK)
+                        {
+                            if(selectedRow==7 && selectedCol==0)
+                                a.blackLeftRook=true;
+                            if(selectedRow==7 && selectedCol==7)
+                                a.blackRightRook=true;
                         }
                         whiteTurn = !whiteTurn;
                     }

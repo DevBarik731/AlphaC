@@ -9,9 +9,18 @@ using namespace std;
 // 2 : possible with kill
 // move from (a,b) -> (x,y)
 int King_validate(Board &v,int a,int b,int x,int y){
-
+    if(abs(v.board[a][b])!=6) return false;
     if(v.board[a][b]*v.board[x][y]>0) return 0; // checking if same colour 
-
+    if(a==x&&abs(y-b)==2)
+    {
+        bool white=v.board[a][b]>0;
+        bool kingside=(y>b);
+        if(castle_validate(v,white,kingside))
+        {
+            return 3;
+        }
+        return 0;
+    }
     // dx and dy storing all possible movements of king
     vector<int> dx={1,-1,0,0,1,1,-1,-1};
     vector<int> dy={0,0,1,-1,1,-1,1,-1};
@@ -116,9 +125,100 @@ int King_check(Board &v,int x,int y){
 
 bool castle_validate(Board &b,bool white,bool kingSide)
 {
-    int row=white?0:7;
-    if(white&&b.whiteKingMoved)
-    {
+    int row=white?7:0;
+
+    if(white && b.whiteKingMoved)
         return false;
+
+    if(!white && b.blackKingMoved)
+        return false;
+
+    int rookcol=kingSide?7:0;
+
+    if(white && b.board[row][rookcol]!=2)
+        return false;
+
+    if(!white && b.board[row][rookcol]!=-2)
+        return false;
+
+    if(white && kingSide && b.whiteRightRook)
+        return false;
+
+    if(white && !kingSide && b.whiteLeftRook)
+        return false;
+
+    if(!white && kingSide && b.blackRightRook)
+        return false;
+
+    if(!white && !kingSide && b.blackLeftRook)
+        return false;
+
+    if(kingSide)
+    {
+        if(b.board[row][5]!=0 || b.board[row][6]!=0)
+            return false;
     }
+    else
+    {
+        if(b.board[row][1]!=0 || b.board[row][2]!=0 || b.board[row][3]!=0)
+            return false;
+    }
+
+    if(King_check(b,row,4))
+        return false;
+
+    int king=b.board[row][4];
+
+    if(kingSide)
+    {
+        b.board[row][4]=0;
+        b.board[row][5]=king;
+
+        if(King_check(b,row,5))
+        {
+            b.board[row][4]=king;
+            b.board[row][5]=0;
+            return false;
+        }
+
+        b.board[row][5]=0;
+        b.board[row][6]=king;
+
+        if(King_check(b,row,6))
+        {
+            b.board[row][4]=king;
+            b.board[row][6]=0;
+            return false;
+        }
+
+        b.board[row][4]=king;
+        b.board[row][6]=0;
+    }
+    else
+    {
+        b.board[row][4]=0;
+        b.board[row][3]=king;
+
+        if(King_check(b,row,3))
+        {
+            b.board[row][4]=king;
+            b.board[row][3]=0;
+            return false;
+        }
+
+        b.board[row][3]=0;
+        b.board[row][2]=king;
+
+        if(King_check(b,row,2))
+        {
+            b.board[row][4]=king;
+            b.board[row][2]=0;
+            return false;
+        }
+
+        b.board[row][4]=king;
+        b.board[row][2]=0;
+    }
+
+    return true;
 }

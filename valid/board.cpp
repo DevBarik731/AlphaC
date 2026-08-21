@@ -17,6 +17,13 @@ Board::Board():board(8,vector<int>(8,0)){
         board[7][4]=6;
         whiteKingPos={7,4};
         blackKingPos={0,4};
+        whiteKingMoved=
+        blackKingMoved=
+        blackLeftRook=
+        whiteLeftRook=
+        blackRightRook=
+        whiteRightRook=
+        false;
     }
 
 void Board::display(){

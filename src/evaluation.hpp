@@ -1,11 +1,16 @@
 #pragma once
 #include "validate.hpp"
 using namespace std;
-
+#include "board.hpp"
 class PieceSquareTable{
     public:
+    int score;
   int getScore(int,int,int);
   int evaluateBoard(const vector<vector<int>> &Board); 
+  int mobilityFactor(int);
+  int getPieceMobility(Board &board,int,int,int,int);
+  int evaluateMobility(Board &board);
+  void findKing(Board &board,int ,int &,int &);
       public:
 // Pawns want to advance to the 8th rank and control the center.
 

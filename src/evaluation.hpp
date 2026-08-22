@@ -10,7 +10,7 @@ class PieceSquareTable{
 // Pawns want to advance to the 8th rank and control the center.
 
 // They are penalized for being on their starting squares blocking other pieces.
-
+const int initial_value[5]={100,563,305,333,950};
 const int pawn_pst[64] = {
 
       0,  0,  0,  0,  0,  0,  0,  0,

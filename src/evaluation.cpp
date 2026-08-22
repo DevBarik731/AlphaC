@@ -37,8 +37,9 @@ int PieceSquareTable::evaluateBoard(const vector<vector<int>>& board)
                 continue;
 
             if(board[i][j] != EMPTY)
-            {
-                int value = getScore(board[i][j], i, j);
+            {   
+                int idx=abs(board[i][j]);
+                int value = initial_value[idx-1]+(board[i][j], i, j);
 
                 if(board[i][j] > 0)
                     score += value;

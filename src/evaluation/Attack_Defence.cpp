@@ -18,20 +18,10 @@ vector<int> Attacker_Defender_Count(Board &v,int x,int y){
             }
             if(a<8 && b<8 && a>=0 && b>=0 && v.board[a][b]!=0){
                 
-                if(v.board[a][b]==-6 && (abs(x-a)+abs(y-b))==1){
-                    if(smallest_attacker==-1) smallest_attacker=victim_value[abs(v.board[a][b])];
-                    else smallest_attacker=min(smallest_attacker,victim_value[abs(v.board[a][b])]);
-                    Attack++;
-                }
                 if(v.board[a][b]==-5 || v.board[a][b]==-2){
                     if(smallest_attacker==-1) smallest_attacker=victim_value[abs(v.board[a][b])];
                     else smallest_attacker=min(smallest_attacker,victim_value[abs(v.board[a][b])]);
                     Attack++;
-                }
-                if(v.board[a][b]==6 && (abs(x-a)+abs(y-b))==1){
-                    if(smallest_defender==-1) smallest_defender=victim_value[abs(v.board[a][b])];
-                    else smallest_defender=min(smallest_defender,victim_value[abs(v.board[a][b])]);
-                    defence++;
                 }
                 if(v.board[a][b]==5 || v.board[a][b]==2){
                     if(smallest_defender==-1) smallest_defender=victim_value[abs(v.board[a][b])];
@@ -49,11 +39,7 @@ vector<int> Attacker_Defender_Count(Board &v,int x,int y){
                 b+=dig_y[it];
             }
             if(a<8 && b<8 && a>=0 && b>=0 && v.board[a][b]!=0){
-                if(v.board[a][b]==-6 && (abs(x-a)+abs(y-b))==2){
-                    if(smallest_attacker==-1) smallest_attacker=victim_value[abs(v.board[a][b])];
-                    else smallest_attacker=min(smallest_attacker,victim_value[abs(v.board[a][b])]);
-                    Attack++;
-                }
+
                 if(v.board[a][b]==-5 || v.board[a][b]==-4){
                     if(smallest_attacker==-1) smallest_attacker=victim_value[abs(v.board[a][b])];
                     else smallest_attacker=min(smallest_attacker,victim_value[abs(v.board[a][b])]);
@@ -63,11 +49,6 @@ vector<int> Attacker_Defender_Count(Board &v,int x,int y){
                     if(smallest_attacker==-1) smallest_attacker=victim_value[abs(v.board[a][b])];
                     else smallest_attacker=min(smallest_attacker,victim_value[abs(v.board[a][b])]);
                     Attack++;
-                }
-                if(v.board[a][b]==6 && (abs(x-a)+abs(y-b))==2){
-                    if(smallest_defender==-1) smallest_defender=victim_value[abs(v.board[a][b])];
-                    else smallest_defender=min(smallest_defender,victim_value[abs(v.board[a][b])]);
-                    defence++;
                 }
                 if(v.board[a][b]==5 || v.board[a][b]==4){
                     if(smallest_defender==-1) smallest_defender=victim_value[abs(v.board[a][b])];
@@ -108,20 +89,10 @@ vector<int> Attacker_Defender_Count(Board &v,int x,int y){
                 b+=hor[it];
             }
             if(a<8 && b<8 && a>=0 && b>=0 && v.board[a][b]!=0){
-               if(v.board[a][b]==-6 && (abs(x-a)+abs(y-b))==1){
-                    if(smallest_defender==-1) smallest_defender=victim_value[abs(v.board[a][b])];
-                    else smallest_defender=min(smallest_defender,victim_value[abs(v.board[a][b])]);
-                    defence++;
-                }
                 if(v.board[a][b]==-5 || v.board[a][b]==-2){
                     if(smallest_defender==-1) smallest_defender=victim_value[abs(v.board[a][b])];
                     else smallest_defender=min(smallest_defender,victim_value[abs(v.board[a][b])]);
                     defence++;
-                }
-                if(v.board[a][b]==6 && (abs(x-a)+abs(y-b))==1){
-                    if(smallest_attacker==-1) smallest_attacker=victim_value[abs(v.board[a][b])];
-                    else smallest_attacker=min(smallest_attacker,victim_value[abs(v.board[a][b])]);
-                    Attack++;
                 }
                 if(v.board[a][b]==5 || v.board[a][b]==2){
                     if(smallest_attacker==-1) smallest_attacker=victim_value[abs(v.board[a][b])];
@@ -139,11 +110,6 @@ vector<int> Attacker_Defender_Count(Board &v,int x,int y){
                 b+=dig_y[it];
             }
             if(a<8 && b<8 && a>=0 && b>=0 && v.board[a][b]!=0){
-                if(v.board[a][b]==-6 && (abs(x-a)+abs(y-b))==2){
-                    if(smallest_defender==-1) smallest_defender=victim_value[abs(v.board[a][b])];
-                    else smallest_defender=min(smallest_defender,victim_value[abs(v.board[a][b])]);
-                    defence++;
-                }
                 if(v.board[a][b]==-5 || v.board[a][b]==-4){
                     if(smallest_defender==-1) smallest_defender=victim_value[abs(v.board[a][b])];
                     else smallest_defender=min(smallest_defender,victim_value[abs(v.board[a][b])]);
@@ -153,11 +119,6 @@ vector<int> Attacker_Defender_Count(Board &v,int x,int y){
                     if(smallest_defender==-1) smallest_defender=victim_value[abs(v.board[a][b])];
                     else smallest_defender=min(smallest_defender,victim_value[abs(v.board[a][b])]);
                     defence++;
-                }
-                if(v.board[a][b]==6 && (abs(x-a)+abs(y-b))==2){
-                    if(smallest_attacker==-1) smallest_attacker=victim_value[abs(v.board[a][b])];
-                    else smallest_attacker=min(smallest_attacker,victim_value[abs(v.board[a][b])]);
-                    Attack++;
                 }
                 if(v.board[a][b]==5 || v.board[a][b]==4){
                     if(smallest_attacker==-1) smallest_attacker=victim_value[abs(v.board[a][b])];
@@ -216,6 +177,7 @@ pair<int,int> pressure(Board &v){
     for(int i=0;i<8;i++){
         for(int j=0;j<8;j++){
             pair<int,int> p;
+            if(abs(v.board[i][j])==6) continue;
             if(v.board[i][j]>0){
                 p=pressure_value(v,i,j);
                 press+=p.first;

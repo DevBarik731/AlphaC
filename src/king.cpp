@@ -39,13 +39,6 @@ int King_validate(Board &v,int a,int b,int x,int y){
 // function to check if king in its current position is checked or not
 int King_check(Board &v,int x,int y){
 
-    vector<int> hor={0,0,1,-1};
-    vector<int> ver={1,-1,0,0};
-    vector<int> dig_x={1,1,-1,-1};
-    vector<int> dig_y={1,-1,1,-1};
-    vector<int> knight_x={1,1,-1,-1,2,2,-2,-2};
-    vector<int> knight_y={-2,2,-2,2,1,-1,1,-1};
-
     if(v.board[x][y]>0){
         for(int it=0;it<4;it++){
             int a=x+ver[it];

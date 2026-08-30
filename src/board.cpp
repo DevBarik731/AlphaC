@@ -23,6 +23,8 @@ Board::Board():board(8,vector<int>(8,0)){
         whiteLeftRook=
         blackRightRook=
         whiteRightRook=
+        whiteHasCastled=
+        blackHasCastled=
         false;
     }
 

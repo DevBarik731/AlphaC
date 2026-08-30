@@ -13,6 +13,8 @@ class Board{
     bool blackLeftRook;
     bool whiteRightRook;
     bool blackRightRook;
+    bool whiteHasCastled;
+    bool blackHasCastled;
     Board();
     void display();
 };

@@ -6,21 +6,21 @@
 
 using namespace std;
 sf::Font font;
-enum Piece {
-    EMPTY = 0,
-    BLACK_PAWN=-1,
-    BLACK_ROOK=-2,
-    BLACK_KNIGHT=-3,
-    BLACK_BISHOP=-4,
-    BLACK_QUEEN=-5,
-    BLACK_KING=-6,
-    WHITE_PAWN = 1,
-    WHITE_ROOK=2,
-    WHITE_KNIGHT=3,
-    WHITE_BISHOP=4,
-    WHITE_QUEEN=5,
-    WHITE_KING=6
-};
+// enum Piece {
+//     EMPTY = 0,
+//     BLACK_PAWN=-1,
+//     BLACK_ROOK=-2,
+//     BLACK_KNIGHT=-3,
+//     BLACK_BISHOP=-4,
+//     BLACK_QUEEN=-5,
+//     BLACK_KING=-6,
+//     WHITE_PAWN = 1,
+//     WHITE_ROOK=2,
+//     WHITE_KNIGHT=3,
+//     WHITE_BISHOP=4,
+//     WHITE_QUEEN=5,
+//     WHITE_KING=6
+// };
 string getTextureName(int piece)
 {
     switch (piece)
@@ -256,6 +256,14 @@ int main()
                             {
                                 a.board[selectedRow][3]=a.board[selectedRow][0];
                                 a.board[selectedRow][0]=EMPTY;
+                            }
+                            if(whiteTurn)
+                            {
+                                a.whiteHasCastled=true;
+                            }
+                            else
+                            {
+                                a.blackHasCastled=true;
                             }
                         }
                         if(piece==WHITE_KING)

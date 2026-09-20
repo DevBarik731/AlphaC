@@ -110,34 +110,47 @@ int main()
     bool whiteTurn = true;
     while (window.isOpen())
     {
-        if(game_end(a,a.whiteKingPos.first,a.whiteKingPos.second)==2)
-        {
-            cout<<"stalemate"<<endl;
-            break;
-        }
-        if(whiteTurn&&game_end(a,a.whiteKingPos.first,a.whiteKingPos.second))
-    {   
-        cout << "BLACK WINS!" << endl;
-        winText.setString("BLACK WINS!");
-        window.clear();
-        window.draw(winText);
-        window.display();
-        sf::sleep(sf::seconds(10));
-        window.close();
-        break;
-    }
+        int whiteState = game_end(a, a.whiteKingPos.first, a.whiteKingPos.second);
+int blackState = game_end(a, a.blackKingPos.first, a.blackKingPos.second);
 
-    if (!whiteTurn&&game_end(a,a.blackKingPos.first,a.blackKingPos.second))
-    {
-        cout << "WHITE WINS!" << endl;
-        winText.setString("WHITE WINS!");
-        window.clear();
-        window.draw(winText);
-        window.display();
-        sf::sleep(sf::seconds(10));
-        window.close();
-        break;
-    }   
+// Check for Stalemate on EITHER side
+if(whiteState == 2 || blackState == 2)
+{
+    cout << "STALEMATE!" << endl;
+    winText.setString("STALEMATE!");
+    window.clear();
+    window.draw(winText);
+    window.display();
+    sf::sleep(sf::seconds(10));
+    window.close();
+    break;
+}
+
+// Check if White is checkmated
+if(whiteState == 1)
+{   
+    cout << "BLACK WINS!" << endl;
+    winText.setString("BLACK WINS!");
+    window.clear();
+    window.draw(winText);
+    window.display();
+    sf::sleep(sf::seconds(10));
+    window.close();
+    break;
+}
+
+// Check if Black is checkmated
+if (blackState == 1)
+{
+    cout << "WHITE WINS!" << endl;
+    winText.setString("WHITE WINS!");
+    window.clear();
+    window.draw(winText);
+    window.display();
+    sf::sleep(sf::seconds(10));
+    window.close();
+    break;
+}
         while (const optional event = window.pollEvent())
         {
             if (event->is<sf::Event::Closed>())
@@ -295,7 +308,51 @@ int main()
                             if(selectedRow==7 && selectedCol==7)
                                 a.blackRightRook=true;
                         }
-                        whiteTurn = !whiteTurn;
+                        whiteTurn = false;
+
+for(int i=0;i<8;i++)
+{
+    for(int j=0;j<8;j++)
+        cout<<a.board[i][j]<<" ";
+    cout<<endl;
+}
+                        int blackKingX=-1;
+int blackKingY=-1;
+
+for(int i=0;i<8;i++)
+{
+    for(int j=0;j<8;j++)
+    {
+        if(a.board[i][j]==BLACK_KING)
+        {
+            blackKingX=i;
+            blackKingY=j;
+        }
+    }
+}
+vector<int> move=best_move(a,blackKingX,blackKingY);
+if(move.empty())
+{
+    cout<<"Black has no legal moves"<<endl;
+    whiteTurn=true;
+    continue;
+}
+                        int blackPiece=a.board[move[0]][move[1]];
+                        a.board[move[2]][move[3]]=blackPiece;
+                        a.board[move[0]][move[1]]=EMPTY;
+                        if(blackPiece==BLACK_KING)
+                        {
+                            a.blackKingPos={move[2],move[3]};
+                            a.blackKingMoved=true;
+                        }
+                        if(blackPiece == BLACK_PAWN)
+{
+    promote_pawn(a, move[2], move[3]); 
+}
+                                                cout<<"Black king: "
+    <<a.blackKingPos.first<<" "
+    <<a.blackKingPos.second<<endl;
+                        whiteTurn=true;
                     }
                     else
                     {

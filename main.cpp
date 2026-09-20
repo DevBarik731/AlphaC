@@ -1,4 +1,5 @@
 #include "src/validate.hpp"
+#include "src/minimax.hpp"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <optional>

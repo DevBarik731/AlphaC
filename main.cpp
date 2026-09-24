@@ -108,6 +108,7 @@ int main()
     int selectedRow = -1;
     int selectedCol = -1;
     bool whiteTurn = true;
+    bool calculatingAI = false;
     while (window.isOpen())
     {
         int whiteState = game_end(a, a.whiteKingPos.first, a.whiteKingPos.second);
@@ -171,7 +172,6 @@ if (blackState == 1)
 
                 int row = mouseY / 60;
                 int col = mouseX / 60;
-
                 if (!selected)
                 {
                     int piece = a.board[row][col];
@@ -309,6 +309,7 @@ if (blackState == 1)
                                 a.blackRightRook=true;
                         }
                         whiteTurn = false;
+                        calculatingAI=true;
 
 for(int i=0;i<8;i++)
 {
@@ -316,43 +317,6 @@ for(int i=0;i<8;i++)
         cout<<a.board[i][j]<<" ";
     cout<<endl;
 }
-                        int blackKingX=-1;
-int blackKingY=-1;
-
-for(int i=0;i<8;i++)
-{
-    for(int j=0;j<8;j++)
-    {
-        if(a.board[i][j]==BLACK_KING)
-        {
-            blackKingX=i;
-            blackKingY=j;
-        }
-    }
-}
-vector<int> move=best_move(a,blackKingX,blackKingY);
-if(move.empty())
-{
-    cout<<"Black has no legal moves"<<endl;
-    whiteTurn=true;
-    continue;
-}
-                        int blackPiece=a.board[move[0]][move[1]];
-                        a.board[move[2]][move[3]]=blackPiece;
-                        a.board[move[0]][move[1]]=EMPTY;
-                        if(blackPiece==BLACK_KING)
-                        {
-                            a.blackKingPos={move[2],move[3]};
-                            a.blackKingMoved=true;
-                        }
-                        if(blackPiece == BLACK_PAWN)
-{
-    promote_pawn(a, move[2], move[3]); 
-}
-                                                cout<<"Black king: "
-    <<a.blackKingPos.first<<" "
-    <<a.blackKingPos.second<<endl;
-                        whiteTurn=true;
                     }
                     else
                     {
@@ -514,7 +478,61 @@ if(move.empty())
             }
         }
 
-        window.display();
+window.display();
+
+if(!whiteTurn && calculatingAI)
+{
+    calculatingAI = false;
+
+    int blackKingX=-1;
+    int blackKingY=-1;
+
+    for(int i=0;i<8;i++)
+    {
+        for(int j=0;j<8;j++)
+        {
+            if(a.board[i][j]==BLACK_KING)
+            {
+                blackKingX=i;
+                blackKingY=j;
+            }
+        }
+    }
+
+    cout << "Calculating black move..." << endl;
+
+    vector<int> move=best_move(a,blackKingX,blackKingY);
+
+    if(move.empty())
+    {
+        cout << "Black has no legal moves" << endl;
+        whiteTurn=true;
+    }
+    else
+    {
+        int blackPiece=a.board[move[0]][move[1]];
+
+        a.board[move[2]][move[3]]=blackPiece;
+        a.board[move[0]][move[1]]=EMPTY;
+        if(blackPiece==BLACK_KING)
+        {
+            a.blackKingPos={move[2],move[3]};
+            a.blackKingMoved=true;
+        }
+        if(blackPiece==BLACK_PAWN)
+        {
+            promote_pawn(a,move[2],move[3]);
+        }
+
+        cout << "Black moved: "
+             << move[0] << "," << move[1]
+             << " -> "
+             << move[2] << "," << move[3]
+             << endl;
+
+        whiteTurn=true;
+    }
+}
     }
 
     return 0;

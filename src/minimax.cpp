@@ -1,6 +1,5 @@
 #include "minimax.hpp"
-
-
+#include "evaluation/evaluate.hpp"
 void rook_moves(Board &v,int x_king,int y_king,int x,int y,vector<vector<int>> &ds){
     for(int i=0;i<4;i++){
         int a=x;
@@ -110,79 +109,135 @@ vector<vector<int>> generateMoves(Board &v,int x_king,int y_king){
     return moves;
 }
 
-int minimax(Board &v,int depth,int player){
-    if(depth==0) return rand()%11; // currently no evaluation function
+int minimax(Board &v,int depth,int player)
+{
+    if(depth==0)
+        return evaluate(v);
+
     int x_king=-1,y_king=-1;
-    for(int i=0;i<8;i++){
-        for(int j=0;j<8;j++){
-            if(v.board[i][j]==6*(player)){
+
+    for(int i=0;i<8;i++)
+    {
+        for(int j=0;j<8;j++)
+        {
+            if(v.board[i][j]==6*player)
+            {
                 x_king=i;
                 y_king=j;
                 break;
             }
         }
-        if(x_king!=-1) break;
+
+        if(x_king!=-1)
+            break;
     }
+
     if(x_king==-1 || y_king==-1)
-    return rand()%10+1;
+        return evaluate(v);
 
-vector<vector<int>> moves=generateMoves(v,x_king,y_king);
+    vector<vector<int>> moves=generateMoves(v,x_king,y_king);
 
-if(moves.empty())
-    return rand()%10+1;
-    if(player==-1){
-        int best=-10000;
-        for(auto &move:moves){
+    if(moves.empty())
+        return evaluate(v);
+
+    if(player==1)
+    {
+        // WHITE -> MAX
+        int best=-1000000000;
+
+        for(auto &move:moves)
+        {
             int a=v.board[move[0]][move[1]];
             int b=v.board[move[2]][move[3]];
+
             v.board[move[2]][move[3]]=a;
             v.board[move[0]][move[1]]=0;
-            if(abs(a)==1) promote_pawn(v,move[2],move[3]);
+
+            if(abs(a)==1)
+                promote_pawn(v,move[2],move[3]);
+
             int score=minimax(v,depth-1,-player);
+
             v.board[move[2]][move[3]]=b;
             v.board[move[0]][move[1]]=a;
+
             best=max(best,score);
         }
+
         return best;
     }
-    else{
-        int best=10000;
-        for(auto &move:moves){
+    else
+    {
+        // BLACK -> MIN
+        int best=1000000000;
+
+        for(auto &move:moves)
+        {
             int a=v.board[move[0]][move[1]];
             int b=v.board[move[2]][move[3]];
+
             v.board[move[2]][move[3]]=a;
             v.board[move[0]][move[1]]=0;
+
+            if(abs(a)==1)
+                promote_pawn(v,move[2],move[3]);
 
             int score=minimax(v,depth-1,-player);
 
             v.board[move[2]][move[3]]=b;
             v.board[move[0]][move[1]]=a;
+
             best=min(best,score);
         }
+
         return best;
     }
 }
 
-vector<int> best_move(Board &v,int x_king,int y_king){
+vector<int> best_move(Board &v,int x_king,int y_king)
+{
+    cout << "AI: generating moves..." << endl;
+
     vector<vector<int>> moves=generateMoves(v,x_king,y_king);
-    // cout << "Number of moves: " << moves.size() << endl;
-    if(moves.empty()) return{};
+
+    cout << "AI: moves = " << moves.size() << endl;
+
+    if(moves.empty())
+        return {};
+
     vector<int> bestMove=moves[0];
-    int bestScore =-10000;
-    for(auto &move:moves){
+    int bestScore=1000000000;
+
+    int cnt=0;
+
+    for(auto &move:moves)
+    {
+        cout << "AI: testing move " << ++cnt << "/" << moves.size() << endl;
+
         int a=v.board[move[0]][move[1]];
-            int b=v.board[move[2]][move[3]];
-            v.board[move[2]][move[3]]=a;
-            v.board[move[0]][move[1]]=0;
+        int b=v.board[move[2]][move[3]];
 
-            int score=minimax(v,2,1);
+        v.board[move[2]][move[3]]=a;
+        v.board[move[0]][move[1]]=0;
 
-            v.board[move[2]][move[3]]=b;
-            v.board[move[0]][move[1]]=a;
-            if(score>bestScore){
-                bestScore=score;
-                bestMove=move;
-            }
+        if(abs(a)==1)
+            promote_pawn(v,move[2],move[3]);
+
+        int score=minimax(v,2,1);
+
+        cout << "    score = " << score << endl;
+
+        v.board[move[2]][move[3]]=b;
+        v.board[move[0]][move[1]]=a;
+
+        if(score<bestScore)
+        {
+            bestScore=score;
+            bestMove=move;
+        }
     }
+
+    cout << "AI: selected move, score = " << bestScore << endl;
+
     return bestMove;
 }

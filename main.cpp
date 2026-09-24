@@ -296,16 +296,16 @@ if (blackState == 1)
                         }
                         if(piece==WHITE_ROOK)
                         {
-                            if(selectedRow==0 && selectedCol==0)
+                            if(selectedRow==7 && selectedCol==0)
                                 a.whiteLeftRook=true;
-                            if(selectedRow==0 && selectedCol==7)
+                            if(selectedRow==7 && selectedCol==7)
                                 a.whiteRightRook=true;
                         }
                         if(piece==BLACK_ROOK)
                         {
-                            if(selectedRow==7 && selectedCol==0)
+                            if(selectedRow==0 && selectedCol==0)
                                 a.blackLeftRook=true;
-                            if(selectedRow==7 && selectedCol==7)
+                            if(selectedRow==0 && selectedCol==7)
                                 a.blackRightRook=true;
                         }
                         whiteTurn = false;
@@ -523,7 +523,13 @@ if(!whiteTurn && calculatingAI)
         {
             promote_pawn(a,move[2],move[3]);
         }
+        if(blackPiece==BLACK_ROOK) {
+        if(selectedRow==0 && selectedCol==0)
+            a.blackLeftRook=true;
 
+        if(selectedRow==0 && selectedCol==7)
+            a.blackRightRook=true;
+        }   
         cout << "Black moved: "
              << move[0] << "," << move[1]
              << " -> "

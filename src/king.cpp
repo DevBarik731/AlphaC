@@ -38,7 +38,8 @@ int King_validate(Board &v,int a,int b,int x,int y){
 
 // function to check if king in its current position is checked or not
 int King_check(Board &v,int x,int y){
-
+    if(x < 0 || x >= 8 || y < 0 || y >= 8) return 0;
+    if(v.board[x][y] == 0) return 0;
     if(v.board[x][y]>0){
         for(int it=0;it<4;it++){
             int a=x+ver[it];

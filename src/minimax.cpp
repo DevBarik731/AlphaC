@@ -110,10 +110,7 @@ vector<vector<int>> generateMoves(Board &v,int x_king,int y_king){
 }
 
 int minimax(Board &v,int depth,int player)
-{
-    if(depth==0)
-        return evaluate(v);
-
+{   
     int x_king=-1,y_king=-1;
 
     for(int i=0;i<8;i++)
@@ -132,7 +129,12 @@ int minimax(Board &v,int depth,int player)
             break;
     }
 
-    if(x_king==-1 || y_king==-1)
+    if(x_king==-1 || y_king==-1) {
+        if (player == 1) return -100000000; 
+        else return 100000000; 
+    }
+    
+    if(depth==0)
         return evaluate(v);
 
     vector<vector<int>> moves=generateMoves(v,x_king,y_king);

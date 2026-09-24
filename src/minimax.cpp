@@ -109,35 +109,33 @@ vector<vector<int>> generateMoves(Board &v,int x_king,int y_king){
     return moves;
 }
 
-int minimax(Board &v,int depth,int player)
+int minimax(Board &v,int depth,int alpha,int beta,int player)
 {   
-    int x_king=-1,y_king=-1;
+    int white_king_x = -1, white_king_y = -1;
+    int black_king_x = -1, black_king_y = -1;
 
-    for(int i=0;i<8;i++)
-    {
-        for(int j=0;j<8;j++)
-        {
-            if(v.board[i][j]==6*player)
-            {
-                x_king=i;
-                y_king=j;
-                break;
+    for(int i = 0; i < 8; i++) {
+        for(int j = 0; j < 8; j++) {
+            if(v.board[i][j] == 6) {
+                white_king_x = i;
+                white_king_y = j;
+            }
+            else if(v.board[i][j] == -6) {
+                black_king_x = i;
+                black_king_y = j;
             }
         }
-
-        if(x_king!=-1)
-            break;
     }
 
-    if(x_king==-1 || y_king==-1) {
-        if (player == 1) return -100000000; 
-        else return 100000000; 
-    }
+    if (white_king_x == -1) return -100000000;
+    if (black_king_x == -1) return 100000000; 
     
     if(depth==0)
         return evaluate(v);
 
-    vector<vector<int>> moves=generateMoves(v,x_king,y_king);
+    vector<vector<int>> moves;
+    if(player==1) moves=generateMoves(v,white_king_x,white_king_y);
+    if(player==-1) moves=generateMoves(v,black_king_x,black_king_y);
 
     if(moves.empty())
         return evaluate(v);
@@ -158,12 +156,15 @@ int minimax(Board &v,int depth,int player)
             if(abs(a)==1)
                 promote_pawn(v,move[2],move[3]);
 
-            int score=minimax(v,depth-1,-player);
+            int score=minimax(v,depth-1,alpha,beta,-player);
 
             v.board[move[2]][move[3]]=b;
             v.board[move[0]][move[1]]=a;
 
             best=max(best,score);
+
+            alpha=max(alpha,best);
+            if(beta<=alpha) break;
         }
 
         return best;
@@ -184,12 +185,16 @@ int minimax(Board &v,int depth,int player)
             if(abs(a)==1)
                 promote_pawn(v,move[2],move[3]);
 
-            int score=minimax(v,depth-1,-player);
+            int score=minimax(v,depth-1,alpha,beta,-player);
 
             v.board[move[2]][move[3]]=b;
             v.board[move[0]][move[1]]=a;
 
             best=min(best,score);
+
+            beta=min(beta,best);
+
+            if(beta<=alpha) break;
         }
 
         return best;
@@ -209,7 +214,8 @@ vector<int> best_move(Board &v,int x_king,int y_king)
 
     vector<int> bestMove=moves[0];
     int bestScore=1000000000;
-
+    int alpha=-1000000000;
+    int beta=1000000000;
     int cnt=0;
 
     for(auto &move:moves)
@@ -225,7 +231,7 @@ vector<int> best_move(Board &v,int x_king,int y_king)
         if(abs(a)==1)
             promote_pawn(v,move[2],move[3]);
 
-        int score=minimax(v,2,1);
+        int score=minimax(v,3,alpha,beta,1);
 
         cout << "    score = " << score << endl;
 
@@ -237,6 +243,8 @@ vector<int> best_move(Board &v,int x_king,int y_king)
             bestScore=score;
             bestMove=move;
         }
+
+        beta = min(beta, bestScore);
     }
 
     cout << "AI: selected move, score = " << bestScore << endl;

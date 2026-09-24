@@ -121,6 +121,9 @@ int validate(Board &v,int x_curr, int y_curr, int x_new, int y_new,int x_king,in
 // checks if a player has moves left or not: basically checks for checkmate and stalemate
 // it generates all possile moves.
 int game_end(Board& v,int x_king,int y_king){
+    if (x_king < 0 || x_king > 7 || y_king < 0 || y_king > 7) {
+        return 1;
+    }
     int flag;
     if(v.board[x_king][y_king]>0) flag=1;
     else flag=-1;

@@ -11,16 +11,19 @@ using namespace std;
 int King_validate(Board &v,int a,int b,int x,int y){
     if(abs(v.board[a][b])!=6) return false;
     if(v.board[a][b]*v.board[x][y]>0) return 0; // checking if same colour 
-    if(a==x&&abs(y-b)==2)
+    
+    bool isWhiteKing = (v.board[a][b] == 6);
+    bool isBlackKing = (v.board[a][b] == -6);
+    if ((isWhiteKing && a == 7 && b == 4 && x == 7 && (y == 6 || y == 2)) ||
+        (isBlackKing && a == 0 && b == 4 && x == 0 && (y == 6 || y == 2)))
     {
-        bool white=v.board[a][b]>0;
-        bool kingside=(y>b);
-        if(castle_validate(v,white,kingside))
-        {
+        bool kingside = (y > b);
+        if (castle_validate(v, isWhiteKing, kingside)) {
             return 3;
         }
         return 0;
     }
+
     // dx and dy storing all possible movements of king
     vector<int> dx={1,-1,0,0,1,1,-1,-1};
     vector<int> dy={0,0,1,-1,1,-1,1,-1};
@@ -119,8 +122,12 @@ int King_check(Board &v,int x,int y){
 
 bool castle_validate(Board &b,bool white,bool kingSide)
 {
+    
     int row=white?7:0;
-
+    int expectedKing = white ? 6 : -6;
+    if (b.board[row][4] != expectedKing) {
+        return false;
+    }
     if(white && b.whiteKingMoved)
         return false;
 

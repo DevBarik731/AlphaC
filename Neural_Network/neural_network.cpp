@@ -41,62 +41,42 @@ double neuralNetwork(vector<double> x)
         x[i] = (x[i] - SCALER_MEAN[i]) / SCALER_SCALE[i];
     }
 
-    // Dense 1: 9 -> 128
+    // Dense 1: 9 -> 32
     x = dense(
         x,
         &W1[0][0],
         B1,
         9,
-        128,
+        32,
         true
     );
 
-    // Dense 2: 128 -> 64
+    // Dense 2: 32 -> 20
     x = dense(
         x,
         &W2[0][0],
         B2,
-        128,
-        64,
+        32,
+        20,
         true
     );
 
-    // Dense 3: 64 -> 64
+    // Dense 3: 20 -> 16
     x = dense(
         x,
         &W3[0][0],
         B3,
-        64,
-        64,
+        20,
+        16,
         true
     );
 
-    // Dense 4: 64 -> 32
+    // Output layer: 16 -> 1
     x = dense(
         x,
         &W4[0][0],
         B4,
-        64,
-        32,
-        true
-    );
-
-    // Dense 5: 32 -> 20
-    x = dense(
-        x,
-        &W5[0][0],
-        B5,
-        32,
-        20,
-        true
-    );
-
-    // Output layer: 20 -> 1
-    x = dense(
-        x,
-        &W6[0][0],
-        B6,
-        20,
+        16,
         1,
         false
     );

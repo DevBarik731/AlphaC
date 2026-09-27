@@ -35,7 +35,7 @@ This project is a chess engine built from scratch with the goal of understanding
 - Preparing the engine for deeper searches and stronger gameplay
 - Improving move generation
 
-**## Installation**
+## Installation
 
 ### Arch-Based
 

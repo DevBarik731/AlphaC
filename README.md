@@ -40,7 +40,7 @@ This project is a chess engine built from scratch with the goal of understanding
 ### Arch-Based
 
 ```bash
-curl -LO https://raw.githubusercontent.com/DevBarik731/AlphaC/main/install_scripts/Arch_install.sh
+curl -LO https://raw.githubusercontent.com/DevBarik731/AlphaC/main/install_scripts/Linux/Arch_install.sh
 chmod +x Arch_install.sh
 ./Arch_install.sh
 ```

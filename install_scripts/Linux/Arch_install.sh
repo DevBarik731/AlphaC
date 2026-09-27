@@ -1,24 +1,31 @@
-
 #!/usr/bin/env bash
 
 set -e
 
-REPO_URL="https://github.com/DevBarik731/AlphaC.git"
+REPO="https://github.com/DevBarik731/AlphaC.git"
 INSTALL_DIR="$HOME/.local/share/AlphaC"
 BIN_DIR="$HOME/.local/bin"
-APP="$INSTALL_DIR/app"
 
 echo "======================================"
-echo "           AlphaC Installer"
+echo "          AlphaC Installer"
 echo "======================================"
 echo
+
+# Don't allow the whole installer to run as root.
+if [ "$EUID" -eq 0 ]; then
+    echo "ERROR: Do not run this installer with sudo."
+    echo
+    echo "Use:"
+    echo "  curl -fsSL https://raw.githubusercontent.com/DevBarik731/AlphaC/main/install.sh | bash"
+    exit 1
+fi
 
 # --------------------------------------
 # Check Arch Linux
 # --------------------------------------
 
 if ! command -v pacman >/dev/null 2>&1; then
-    echo "Error: This installer is for Arch Linux."
+    echo "ERROR: AlphaC installer currently supports Arch Linux only."
     exit 1
 fi
 
@@ -31,27 +38,28 @@ echo "[1/5] Installing dependencies..."
 sudo pacman -S --needed \
     gcc \
     cmake \
+    git \
     sfml \
-    git
-
-echo
-echo "Dependencies installed."
-echo
+    ttf-dejavu
 
 # --------------------------------------
-# Clone / update repository
+# Clone repository
 # --------------------------------------
 
-echo "[2/5] Getting AlphaC..."
+echo
+echo "[2/5] Downloading AlphaC..."
 
 mkdir -p "$HOME/.local/share"
 
 if [ -d "$INSTALL_DIR/.git" ]; then
-    echo "AlphaC already exists. Updating..."
+    echo "AlphaC already exists."
+    echo "Updating repository..."
+
     git -C "$INSTALL_DIR" pull --ff-only
 else
     rm -rf "$INSTALL_DIR"
-    git clone "$REPO_URL" "$INSTALL_DIR"
+
+    git clone "$REPO" "$INSTALL_DIR"
 fi
 
 cd "$INSTALL_DIR"
@@ -94,10 +102,8 @@ set_target_properties(app PROPERTIES
 )
 EOF
 
-echo "CMakeLists.txt created."
-
 # --------------------------------------
-# Configure project
+# Build
 # --------------------------------------
 
 echo
@@ -114,20 +120,14 @@ cmake \
     --build build \
     --parallel "$(nproc)"
 
-if [ ! -f "$APP" ]; then
+if [ ! -x "$INSTALL_DIR/app" ]; then
     echo
-    echo "ERROR: AlphaC build failed."
+    echo "ERROR: AlphaC failed to build."
     exit 1
 fi
 
-chmod +x "$APP"
-
-echo
-echo "Build successful."
-echo "Executable: $APP"
-
 # --------------------------------------
-# Create alphac launcher
+# Create alphac command
 # --------------------------------------
 
 echo
@@ -137,6 +137,7 @@ mkdir -p "$BIN_DIR"
 
 cat > "$BIN_DIR/alphac" <<EOF
 #!/usr/bin/env bash
+
 cd "$INSTALL_DIR"
 exec ./app "\$@"
 EOF
@@ -150,32 +151,16 @@ chmod +x "$BIN_DIR/alphac"
 add_path() {
     local rc="$1"
 
-    if [ -f "$rc" ]; then
-        if ! grep -qF 'export PATH="$HOME/.local/bin:$PATH"' "$rc"; then
-            printf '\n# AlphaC\nexport PATH="$HOME/.local/bin:$PATH"\n' >> "$rc"
-        fi
+    [ -f "$rc" ] || return 0
+
+    if ! grep -qF 'export PATH="$HOME/.local/bin:$PATH"' "$rc"; then
+        printf '\n# AlphaC\n' >> "$rc"
+        printf 'export PATH="$HOME/.local/bin:$PATH"\n' >> "$rc"
     fi
 }
 
-add_path "$HOME/.bashrc"
 add_path "$HOME/.zshrc"
-
-# --------------------------------------
-# Add alias
-# --------------------------------------
-
-add_alias() {
-    local rc="$1"
-
-    if [ -f "$rc" ]; then
-        if ! grep -qF "alias alphac=" "$rc"; then
-            printf '\n# AlphaC\nalias alphac="$BIN_DIR/alphac"\n' >> "$rc"
-        fi
-    fi
-}
-
-add_alias "$HOME/.bashrc"
-add_alias "$HOME/.zshrc"
+add_path "$HOME/.bashrc"
 
 # --------------------------------------
 # Finish
@@ -183,20 +168,30 @@ add_alias "$HOME/.zshrc"
 
 echo
 echo "======================================"
-echo "       AlphaC Installed Successfully"
+echo "      AlphaC installed successfully!"
 echo "======================================"
 echo
 echo "Run AlphaC with:"
 echo
 echo "    alphac"
 echo
-echo "Or:"
+echo "Executable:"
 echo
-echo "    $APP"
-echo
-
-echo "Open a new terminal, or run:"
-echo
-echo "    source ~/.zshrc"
+echo "    $INSTALL_DIR/app"
 echo
 
+case ":$PATH:" in
+    *":$BIN_DIR:"*)
+        echo "You can run 'alphac' now."
+        ;;
+    *)
+        echo "Open a new terminal, or run:"
+        echo
+        echo "    export PATH=\"\$HOME/.local/bin:\$PATH\""
+        echo
+        echo "Then:"
+        echo
+        echo "    alphac"
+        ;;
+esac
+```

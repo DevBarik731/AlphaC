@@ -1,4 +1,4 @@
-```bash
+
 #!/usr/bin/env bash
 
 set -e
@@ -199,4 +199,4 @@ echo "Open a new terminal, or run:"
 echo
 echo "    source ~/.zshrc"
 echo
-```
+

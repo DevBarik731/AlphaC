@@ -81,7 +81,7 @@ int main()
         WHITE_QUEEN,
         WHITE_KING
     };
-    if(!font.openFromFile("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"))
+    if(!font.openFromFile("./fonts/DejaVuSans-Bold.ttf"))
     {
         cerr << "Failed to load font\n";
         return 1;

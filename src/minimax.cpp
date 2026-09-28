@@ -1,5 +1,6 @@
 #include "minimax.hpp"
 #include "evaluation/evaluate.hpp"
+#include<algorithm>
 void rook_moves(Board &v,int x_king,int y_king,int x,int y,vector<vector<int>> &ds){
     for(int i=0;i<4;i++){
         int a=x;
@@ -139,6 +140,30 @@ int minimax(Board &v,int depth,int alpha,int beta,int player)
 
     if(moves.empty())
         return evaluate(v);
+    
+        sort(moves.begin(), moves.end(),[&](const auto& a, const auto& b){
+            int victimA = abs(v.board[a[2]][a[3]]);
+            int victimB = abs(v.board[b[2]][b[3]]);
+
+            bool captureA = victimA > 0;
+            bool captureB = victimB > 0;
+
+            if(captureA != captureB)
+                return captureA;   // captures first
+
+            if(captureA) // both captures
+            {
+                if(victimA != victimB)
+                    return victimA > victimB;
+
+                int attackerA = abs(v.board[a[0]][a[1]]);
+                int attackerB = abs(v.board[b[0]][b[1]]);
+
+                return attackerA < attackerB;
+            }
+
+            return false; // both quiet moves
+        });
 
     if(player==1)
     {
@@ -231,7 +256,7 @@ vector<int> best_move(Board &v,int x_king,int y_king)
         if(abs(a)==1)
             promote_pawn(v,move[2],move[3]);
 
-        int score=minimax(v,3,alpha,beta,1);
+        int score=minimax(v,4,alpha,beta,1);
 
         cout << "    score = " << score << endl;
 
